@@ -1,0 +1,17 @@
+********************************************************************************
+*                                  18240: hw3                                  *
+*                             Error log for: eqian                             *
+********************************************************************************
+********************************** Problem 7 ***********************************
+library.sv, library_tests.sv: failed to compile
+
+Error-[SE] Syntax error
+  Following verilog source has syntax error :
+  "/afs/andrew.cmu.edu/usr21/eqian/private/18240/hw/library.sv", 85: token is 
+  ':'
+  module : Subtracter
+          ^
+
+1 error
+
+
