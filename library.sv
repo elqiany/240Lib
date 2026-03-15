@@ -112,6 +112,7 @@ module DFlipFlop
 endmodule : DFlipFlop
 
 module Register
+    #(parameter WIDTH = 8)
     (output logic [WIDTH-1:0] Q,
      input logic en,
      input logic clear,
@@ -128,6 +129,7 @@ module Register
 endmodule : Register
 
 module Counter
+    #(parameter WIDTH = 8)
     (output logic [WIDTH-1:0] Q,
      input logic en,
      input logic clear,
@@ -166,6 +168,7 @@ module Synchronizer
 endmodule : Synchronizer
 
 module ShiftRegisterPIPO
+    #(parameter WIDTH = 8)
     (output logic [WIDTH-1:0] Q,
      input logic en,
      input logic left,
@@ -187,6 +190,7 @@ module ShiftRegisterPIPO
 endmodule : ShiftRegisterPIPO
 
 module ShiftRegisterSIPO
+    #(parameter WIDTH = 8)
     (output logic [WIDTH-1:0] Q,
      input logic en,
      input logic left,
@@ -202,9 +206,10 @@ module ShiftRegisterSIPO
         end
     end
 
-endmodule : shiftRegisterSIPO
+endmodule : ShiftRegisterSIPO
 
 module BarrelShiftRegister
+    #(parameter WIDTH = 8)
     (output logic [WIDTH-1:0] Q,
      input logic en,
      input logic load,
@@ -222,6 +227,7 @@ module BarrelShiftRegister
 endmodule : BarrelShiftRegister
 
 module BusDriver
+    #(parameter WIDTH = 8)
     (output logic [WIDTH-1:0] bus,
      input logic en,
      input logic [WIDTH-1:0] buff,
@@ -232,7 +238,9 @@ module BusDriver
 endmodule : BusDriver
 
 module Memory
-    (output logic [DW-1:0] data,
+    #(parameter DW = 8, parameter AW = 4)
+    (output logic [DW-1:0] rdata,
+     input logic [DW-1:0] wdata,
      input logic clock,
      input logic re,
      input logic we,
@@ -242,12 +250,14 @@ module Memory
 
     always_ff @(posedge clock) begin
         if (we)
-            mem[addr] <= data;
+            mem[addr] <= wdata;
     end
 
     always_comb begin
         if (re)
-            data = mem[addr];
+           rdata = mem[addr];
+       else
+           rdata = '0;
     end
 
 endmodule : Memory
