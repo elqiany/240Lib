@@ -5,11 +5,107 @@
         "module",
         1
     ],
-    "top_test": [
-        "top_test",
-        "Y5NCz",
+    "Decoder": [
+        "Decoder",
+        "t8TcA",
+        "module",
+        20
+    ],
+    "BarrelShifter": [
+        "BarrelShifter",
+        "p7fYB",
+        "module",
+        19
+    ],
+    "Multiplexer": [
+        "Multiplexer",
+        "UxyT3",
+        "module",
+        18
+    ],
+    "Mux2to1": [
+        "Mux2to1",
+        "wxUbx",
+        "module",
+        17
+    ],
+    "MagComp": [
+        "MagComp",
+        "vaLRj",
+        "module",
+        16
+    ],
+    "Comparator": [
+        "Comparator",
+        "ZPSNi",
+        "module",
+        15
+    ],
+    "Adder": [
+        "Adder",
+        "xUt1z",
+        "module",
+        14
+    ],
+    "Subtracter": [
+        "Subtracter",
+        "pcAkE",
+        "module",
+        13
+    ],
+    "Register": [
+        "Register",
+        "kynWL",
+        "module",
+        4
+    ],
+    "Counter": [
+        "Counter",
+        "Nsh6f",
         "module",
         2
+    ],
+    "Synchronizer": [
+        "Synchronizer",
+        "mLbx7",
+        "module",
+        11
+    ],
+    "ShiftRegisterPIPO": [
+        "ShiftRegisterPIPO",
+        "w133T",
+        "module",
+        10
+    ],
+    "ShiftRegisterSIPO": [
+        "ShiftRegisterSIPO",
+        "QtqVB",
+        "module",
+        9
+    ],
+    "BarrelShiftRegister": [
+        "BarrelShiftRegister",
+        "ts568",
+        "module",
+        8
+    ],
+    "BusDriver": [
+        "BusDriver",
+        "Bt4nZ",
+        "module",
+        7
+    ],
+    "Memory": [
+        "Memory",
+        "f0K8C",
+        "module",
+        6
+    ],
+    "hw6prob4": [
+        "hw6prob4",
+        "SKbta",
+        "module",
+        21
     ],
     "...MASTER...": [
         "SIM",
