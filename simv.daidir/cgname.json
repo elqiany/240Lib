@@ -5,53 +5,11 @@
         "module",
         1
     ],
-    "Decoder": [
-        "Decoder",
-        "t8TcA",
+    "top_test": [
+        "top_test",
+        "Y5NCz",
         "module",
         2
-    ],
-    "BarrelShifter": [
-        "BarrelShifter",
-        "p7fYB",
-        "module",
-        10
-    ],
-    "Multiplexer": [
-        "Multiplexer",
-        "UxyT3",
-        "module",
-        11
-    ],
-    "Mux2to1": [
-        "Mux2to1",
-        "wxUbx",
-        "module",
-        12
-    ],
-    "MagComp": [
-        "MagComp",
-        "vaLRj",
-        "module",
-        13
-    ],
-    "Comparator": [
-        "Comparator",
-        "ZPSNi",
-        "module",
-        14
-    ],
-    "Adder": [
-        "Adder",
-        "xUt1z",
-        "module",
-        15
-    ],
-    "Subtracter": [
-        "Subtracter",
-        "pcAkE",
-        "module",
-        16
     ],
     "...MASTER...": [
         "SIM",

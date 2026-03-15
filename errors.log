@@ -1,17 +1,32 @@
 ********************************************************************************
-*                                  18240: hw3                                  *
+*                                  18240: hw5                                  *
 *                             Error log for: eqian                             *
 ********************************************************************************
-********************************** Problem 7 ***********************************
-library.sv, library_tests.sv: failed to compile
+********************************** Problem 5 ***********************************
+/afs/ece.cmu.edu/class/ece240/handout/hw5/hw4prob5.sv, hw5prob5.sv: failed to compile
+Doing common elaboration 
 
-Error-[SE] Syntax error
-  Following verilog source has syntax error :
-  "/afs/andrew.cmu.edu/usr21/eqian/private/18240/hw/library.sv", 85: token is 
-  ':'
-  module : Subtracter
-          ^
+Error-[XMRE] Cross-module reference resolution error
+/afs/andrew.cmu.edu/usr21/eqian/private/18240/hw/hw5prob5.sv, 17
+  Error found while trying to resolve cross-module reference.
+  token 'state'.  Originating module 'hw5prob5'.
+  Source info: $monitor($time, , "Current State: %b, the_input = %b, Next 
+  State = %b, problem2 = %b", dut.state, the_input, dut.next_state, 
+  dut.problem2);
+  
 
-1 error
+
+Error-[XMRE] Cross-module reference resolution error
+/afs/andrew.cmu.edu/usr21/eqian/private/18240/hw/hw5prob5.sv, 17
+  Error found while trying to resolve cross-module reference.
+  token 'next_state'.  Originating module 'hw5prob5'.
+  Source info: $monitor($time, , "Current State: %b, the_input = %b, Next 
+  State = %b, problem2 = %b", dut.state, the_input, dut.next_state, 
+  dut.problem2);
+  
+
+2 errors
+
+ common elaboration failed
 
 

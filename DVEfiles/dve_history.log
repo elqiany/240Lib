@@ -1,0 +1,70 @@
+# Preference setting overrides
+gui_create_pref_key -category {Globals} -key {load_detail_for_funcov} -value_type {bool} -value {false}
+
+# State setting overrides
+gui_state_default_create -off -ini
+gui_set_state_value -category Layout -key child_console_size_x -value 714
+gui_set_state_value -category Layout -key child_console_size_y -value 174
+gui_set_state_value -category Layout -key child_data_size_x -value 170
+gui_set_state_value -category Layout -key child_data_size_y -value 360
+gui_set_state_value -category Layout -key child_hier_col3 -value {-1}
+gui_set_state_value -category Layout -key child_hier_colpd -value 0
+gui_set_state_value -category Layout -key child_hier_size_x -value 170
+gui_set_state_value -category Layout -key child_hier_size_y -value 360
+gui_set_state_value -category Layout -key child_source_docknewline -value false
+gui_set_state_value -category Layout -key child_source_pos_x -value {-2}
+gui_set_state_value -category Layout -key child_source_pos_y -value {-17}
+gui_set_state_value -category Layout -key child_source_size_x -value 377
+gui_set_state_value -category Layout -key child_source_size_y -value 356
+gui_set_state_value -category Layout -key child_wave_colname -value 119
+gui_set_state_value -category Layout -key child_wave_colvalue -value 120
+gui_set_state_value -category Layout -key child_wave_left -value 243
+gui_set_state_value -category Layout -key child_wave_right -value 590
+gui_set_state_value -category Layout -key main_pos_x -value 762
+gui_set_state_value -category Layout -key main_pos_y -value 61
+gui_set_state_value -category Layout -key main_size_x -value 1476
+gui_set_state_value -category Layout -key main_size_y -value 765
+gui_set_state_value -category Layout -key stand_wave_child_docknewline -value false
+gui_set_state_value -category Layout -key stand_wave_child_showstate -value normal
+gui_set_state_value -category Layout -key stand_wave_child_size_x -value 843
+gui_set_state_value -category Layout -key stand_wave_child_size_y -value 303
+gui_set_state_value -category Layout -key stand_wave_top_pos_x -value 577
+gui_set_state_value -category Layout -key stand_wave_top_pos_y -value 103
+gui_set_state_value -category Layout -key stand_wave_top_size_x -value 1423
+gui_set_state_value -category Layout -key stand_wave_top_size_y -value 599
+gui_create_state_key -category FindDialog -key m_pMatchCase -value_type bool -value false
+gui_create_state_key -category FindDialog -key m_pMatchWord -value_type bool -value false
+gui_create_state_key -category FindDialog -key m_pUseCombo -value_type string -value {}
+gui_create_state_key -category FindDialog -key m_pWrapAround -value_type bool -value true
+gui_state_default_create -off
+
+# Begin command logging
+gui_sim_run Ucli -exe ./simv -args {-ucligui  } -dir .
+gui_list_select -id Data.1 -selected  { top_test.clock   }
+gui_list_expand -id  Hier.1   top_test
+gui_list_select -id Hier.1 -current_item_name top_test.dut -current_item_type Scope  -selected  { top_test.dut   }
+gui_list_select -id Data.1 -selected  { top_test.dut.clock   }
+gui_open_window Wave
+gui_list_add -id Wave.1 -from Data.1 { top_test.dut.clock } -insertionbar
+gui_list_expand -id  Hier.1   top_test.dut
+gui_list_select -id Hier.1 -current_item_name top_test.dut.a1 -current_item_type Scope  -selected  { top_test.dut.a1   }
+gui_list_select -id Hier.1 -current_item_name top_test.dut -current_item_type Scope  -selected  { top_test.dut   }
+gui_list_select -id Hier.1 -current_item_name top_test.dut.c1 -current_item_type Scope  -selected  { top_test.dut.c1   }
+gui_list_select -id Data.1 -selected  { top_test.dut.c1.cs   }
+gui_list_add -id Wave.1 -from Data.1 { {top_test.dut.c1.cs[2:0]} } -insertionbar
+gui_list_select -id Data.1 -selected  { top_test.dut.c1.ns   }
+gui_list_add -id Wave.1 -from Data.1 { {top_test.dut.c1.ns[2:0]} } -insertionbar
+gui_list_select -id Hier.1 -current_item_name top_test.dut -current_item_type Scope  -selected  { top_test.dut   }
+gui_list_select -id Data.1 -selected  { top_test.dut.cl_L   }
+gui_list_add -id Wave.1 -from Data.1 { top_test.dut.cl_L } -insertionbar
+gui_list_select -id Data.1 -selected  { top_test.dut.ld_L   }
+gui_list_add -id Wave.1 -from Data.1 { top_test.dut.ld_L } -insertionbar
+gui_list_select -id Data.1 -selected  { {top_test.dut.addOut[15:0]}   }
+gui_list_add -id Wave.1 -from Data.1 { {top_test.dut.addOut[15:0]} } -insertionbar
+gui_list_select -id Data.1 -selected  { {top_test.dut.sum[15:0]}   }
+gui_list_add -id Wave.1 -from Data.1 { {top_test.dut.sum[15:0]} } -insertionbar
+gui_sim_continue  
+gui_zoom -window Wave.1 -full
+gui_wv_scroll_vslidermove -id  Wave.1 21
+gui_wv_zoom_timerange -id  Wave.1 0 36
+gui_close_window -window TopLevel.2

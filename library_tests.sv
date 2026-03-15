@@ -243,3 +243,308 @@ module Subtracter_test;
    end
 
 endmodule : Subtracter_test
+
+module DFlipFlop_test;
+
+    logic D;
+    logic clock;
+    logic preset_L;
+    logic reset_L;
+    logic Q;
+
+    DFlipFlop DUT (.D(D),
+                   .clock(clock),
+                   .preset_L(preset_L),
+                   .reset_L(reset_L),
+                   .Q(Q));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "D = %b, preset_L = %b, reset_L = %b, Q = %b",
+            D, preset_L, reset_L, Q);
+
+        #10 D = 0; preset_L = 1; reset_L = 1;
+        #10 D = 1; preset_L = 1; reset_L = 1;
+        #10 D = 0; preset_L = 0; reset_L = 1;
+        #10 D = 0; preset_L = 1; reset_L = 0;
+        #10 $finish;
+    end
+
+endmodule : DFlipFlop_test
+
+module Register_test;
+
+    logic en;
+    logic clear;
+    logic clock;
+    logic [7:0] D;
+    logic [7:0] Q;
+
+    Register DUT (.en(en),
+                  .clear(clear),
+                  .clock(clock),
+                  .D(D),
+                  .Q(Q));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "en = %b, clear = %b, D = %b, Q = %b",
+        en, clear, D, Q);
+
+        #10 en = 0; clear = 0; D = 8'd0;
+        #10 en = 1; clear = 0; D = 8'd12;
+        #10 en = 1; clear = 0; D = 8'd25;
+        #10 en = 0; clear = 1; D = 8'd50;
+        #10 $finish;
+
+    end
+
+endmodule : Register_test
+
+module Counter_test;
+
+    logic en;
+    logic clear;
+    logic load;
+    logic up;
+    logic clock;
+    logic [7:0] D;
+    logic [7:0] Q;
+
+    Counter DUT (.en(en),
+                 .clear(clear),
+                 .load(load),
+                 .up(up),
+                 .clock(clock),
+                 .D(D),
+                 .Q(Q));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "en = %b, clear = %b, load = %b, up = %b, D = %b, Q = %b",
+            en, clear, load, up, D, Q);
+
+        #10 en = 0; clear = 1; load = 0; up = 1; D = 8'd0;
+        #10 en = 0; clear = 0; load = 1; up = 1; D = 8'd5;
+        #10 en = 1; clear = 0; load = 0; up = 1; D = 8'd0;
+        #10 en = 1; clear = 0; load = 0; up = 0; D = 8'd0;
+        #10 $finish;
+
+    end
+
+endmodule : Counter_test
+
+module Synchronizer_test;
+
+    logic async;
+    logic clock;
+    logic sync;
+
+    Synchronizer DUT (.async(async),
+                      .clock(clock),
+                      .sync(sync));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "async = %b, sync = %b",
+            async, sync);
+
+        #10 async = 0;
+        #10 async = 1;
+        #10 async = 0;
+        #10 async = 1;
+        #10 $finish;
+
+    end
+
+endmodule : Synchronizer_test
+
+module ShiftRegisterPIPO_test;
+
+    logic en;
+    logic left;
+    logic load;
+    logic clock;
+    logic [7:0] D;
+    logic [7:0] Q;
+
+    ShiftRegisterPIPO DUT (.en(en),
+                           .left(left),
+                           .load(load),
+                           .clock(clock),
+                           .D(D),
+                           .Q(Q));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "en = %b, left = %b, load = %b, D = %b, Q = %b",
+            en, left, load, D, Q);
+
+        #10 en = 0; left = 0; load = 1; D = 8'b10101010;
+        #10 en = 1; left = 1; load = 0; D = 8'b10101010;
+        #10 en = 1; left = 0; load = 0; D = 8'b10101010;
+        #10 en = 0; left = 0; load = 0; D = 8'b10101010;
+        #10 $finish;
+
+    end
+
+endmodule : ShiftRegisterPIPO_test
+
+module ShiftRegisterSIPO_test;
+
+    logic en;
+    logic left;
+    logic serial;
+    logic clock;
+    logic [7:0] Q;
+
+    ShiftRegisterSIPO DUT (.en(en),
+                           .left(left),
+                           .serial(serial),
+                           .clock(clock),
+                           .Q(Q));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "en = %b, left = %b, serial = %b, Q = %b",
+            en, left, serial, Q);
+
+        #10 en = 1; left = 1; serial = 1;
+        #10 en = 1; left = 1; serial = 0;
+        #10 en = 1; left = 0; serial = 1;
+        #10 en = 0; left = 0; serial = 0;
+        #10 $finish;
+
+    end
+
+endmodule : ShiftRegisterSIPO_test
+
+module BarrelShiftRegister_test;
+
+    logic en;
+    logic load;
+    logic clock;
+    logic [1:0] by;
+    logic [7:0] D;
+    logic [7:0] Q;
+
+    BarrelShiftRegister DUT (.en(en),
+                           .left(left),
+                           .by(by),
+                           .clock(clock),
+                           .D(D),
+                           .Q(Q));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "en = %b, load = %b,by = %b,  D = %b, Q = %b",
+            en, load, by, D, Q);
+
+        #10 en = 0; load = 1; by = 2'b00; D = 8'b00001111;
+        #10 en = 1; load = 0; by = 2'b01; D = 8'b00000000;
+        #10 en = 1; load = 0; by = 2'b10; D = 8'b00000000;
+        #10 en = 1; load = 0; by = 2'b11; D = 8'b00000000;
+        #10 $finish;
+
+    end
+
+endmodule : BarrelShiftRegister_test
+
+module BusDriver_test;
+
+    logic en;
+    logic [7:0] data;
+    logic [7:0] buff;
+    logic [7:0] bus;
+
+    BusDriver DUT (.en(en),
+                   .data(data),
+                   .buff(buff),
+                   .bus(bus));
+
+    initial begin
+        $monitor($time,,
+            "en = %b, data = %b, buff = %b, bus = %b",
+            en, data, buff, bus);
+
+        #10 en = 0; data = 8'b11110000; buff = 8'b00001111;
+        #10 en = 1; data = 8'b11110000; buff = 8'b00001111;
+        #10 en = 0; data = 8'b10101010; buff = 8'b00110011;
+        #10 en = 1; data = 8'b10101010; buff = 8'b00110011;
+        #10 $finish;
+
+    end
+
+endmodule : BusDriver_test
+
+module Memory_test;
+
+    logic [7:0] data;
+    logic clock;
+    logic re;
+    logic we;
+    logic [7:0] addr;
+
+    Memory    DUT (.data(data),
+                   .clock(clock),
+                   .re(re),
+                   .we(we)
+                   .addr(addr));
+
+    initial begin
+        clock = 0;
+        forever #5 clock = ~clock;
+    end
+
+    initial begin
+        $monitor($time,,
+            "re = %b, we = %b, addr = %b, data = %b",
+            re, we, addr, data);
+
+        #10 re = 0; we = 0; addr = 8'd0;
+        #10 re = 1; we = 0; addr = 8'd0;
+        #10 re = 0; we = 1; addr = 8'd1;
+        #10 re = 1; we = 0; addr = 8'd1;
+        #10 $finish;
+
+    end
+
+endmodule : Memory_test
+
+
+
