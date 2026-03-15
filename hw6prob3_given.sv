@@ -14,13 +14,29 @@ module OnesCount
 
   fsm #(w) control (.*);
 
-  ShiftReg_PISO_Right #(w) sr (lowBit, d_in, clock, Sload_L, Sshift_L);
 
-  counter #($clog2(w)) sc (clock, Cclr_L, Cinc_L, SC);
+  always_comb begin
+      if (!Sload_L)
+          next_value = d_in;
+      else if (!Sshift_L)
+          next_value = value & (value - {{w-1}{1'b0}}, 1'b1});
+      else
+          next_value = value;
+    end
 
-  compare #($clog2(w)) cmp (, done, , SC, 'd30);
+    Register #(w) vreg (.Q(value),
+                        .en(!Sload_L || !Sshift_L),
+                        .clear(1'b0),
+                        .clock(clock),
+                        .D(next_value));
 
-  counter #($clog2(w)) oct (clock, Oclr_L, Oinc_L, d_out);
+    Counter #($clog2(w+1)) oct (.Q(d_out),
+                                .en(!Oinc_L),
+                                .clear(!Oclr_L),
+                                .load(1'b0),
+                                .up(1'b1),
+                                .clock(clock),
+                                .D('0));
 
 endmodule: OnesCount
 
