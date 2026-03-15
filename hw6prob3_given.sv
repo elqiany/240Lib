@@ -11,7 +11,10 @@ module OnesCount
   logic Oinc_L;
 
   logic [$clog2(w)-1:0] SC;
+  logic [w-1:0] value, next_value;
 
+  assign done = (value == '0);
+  assign lowBit = value[0];
   fsm #(w) control (.*);
 
 
@@ -19,7 +22,7 @@ module OnesCount
       if (!Sload_L)
           next_value = d_in;
       else if (!Sshift_L)
-          next_value = value & (value - {{w-1}{1'b0}}, 1'b1});
+          next_value = value & (value - 1'b1);
       else
           next_value = value;
     end
@@ -68,7 +71,7 @@ module fsm
          Oclr_L   = 1;
          Cinc_L   = (done) ? 1 : 0;
          Sshift_L = (done) ? 1 : 0;
-         Oinc_L = (done)? 1:~lowBit;
+         Oinc_L = (done)? 1: 0;
          end
     endcase
   end
