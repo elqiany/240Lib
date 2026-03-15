@@ -459,7 +459,7 @@ module BarrelShiftRegister_test;
     logic [7:0] Q;
 
     BarrelShiftRegister DUT (.en(en),
-                           .left(left),
+                           .load(load),
                            .by(by),
                            .clock(clock),
                            .D(D),
@@ -514,16 +514,18 @@ endmodule : BusDriver_test
 
 module Memory_test;
 
-    logic [7:0] data;
+    logic [7:0] rdata;
+    logic [7:0] wdata;
     logic clock;
     logic re;
     logic we;
-    logic [7:0] addr;
+    logic [3:0] addr;
 
-    Memory    DUT (.data(data),
+    Memory    DUT (.rdata(rdata),
+                   .wdata(wdata),
                    .clock(clock),
                    .re(re),
-                   .we(we)
+                   .we(we),
                    .addr(addr));
 
     initial begin
@@ -533,13 +535,17 @@ module Memory_test;
 
     initial begin
         $monitor($time,,
-            "re = %b, we = %b, addr = %b, data = %b",
-            re, we, addr, data);
+            "re = %b, we = %b, addr = %b, wdata = %b rdata = %b",
+            re, we, addr, wdata, rdata);
 
-        #10 re = 0; we = 0; addr = 8'd0;
-        #10 re = 1; we = 0; addr = 8'd0;
-        #10 re = 0; we = 1; addr = 8'd1;
-        #10 re = 1; we = 0; addr = 8'd1;
+        #10 re = 0; we = 0; addr = 4'd0; wdata = 8'd0;
+        #10 re = 0; we = 1; addr = 4'd1; wdata = 8'd42;
+        #10 re = 0; we = 0; addr = 4'd1; wdata = 8'd0;
+        #10 re = 1; we = 0; addr = 4'd1; wdata = 8'd0;
+        #10 re = 0; we = 1; addr = 4'd2; wdata = 8'd99;
+
+        #10 re = 0; we = 0; addr = 4'd2; wdata = 8'd0;
+        #10 re = 1; we = 0; addr = 4'd2; wdata = 8'd0;
         #10 $finish;
 
     end
