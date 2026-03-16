@@ -94,11 +94,11 @@ module Subtracter
 endmodule : Subtracter
 
 module DFlipFlop
-    (output logic Q,
-     input logic D,
+    (input logic D,
      input logic clock,
      input logic preset_L,
-     input logic reset_L);
+     input logic reset_L
+     output logic Q);
 
     always_ff @(posedge clock or negedge preset_L or negedge reset_L) begin
         if (!reset_L)
@@ -113,11 +113,11 @@ endmodule : DFlipFlop
 
 module Register
     #(parameter WIDTH = 8)
-    (output logic [WIDTH-1:0] Q,
-     input logic en,
+    (input logic en,
      input logic clear,
      input logic clock,
-     input logic [WIDTH-1:0] D);
+     input logic [WIDTH-1:0] D
+     output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
         if (en)
@@ -130,13 +130,13 @@ endmodule : Register
 
 module Counter
     #(parameter WIDTH = 8)
-    (output logic [WIDTH-1:0] Q,
-     input logic en,
+    (input logic en,
      input logic clear,
      input logic load,
      input logic up,
      input logic clock,
-     input logic [WIDTH-1:0] D);
+     input logic [WIDTH-1:0] D
+     output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
         if (clear)
@@ -154,9 +154,9 @@ module Counter
 endmodule : Counter
 
 module Synchronizer
-    (output logic sync,
-     input logic async,
-     input logic clock);
+    (input logic async,
+     input logic clock
+     output logic sync);
 
     logic first;
 
@@ -169,12 +169,12 @@ endmodule : Synchronizer
 
 module ShiftRegisterPIPO
     #(parameter WIDTH = 8)
-    (output logic [WIDTH-1:0] Q,
-     input logic en,
+    (input logic en,
      input logic left,
      input logic load,
      input logic clock,
-     input logic [WIDTH-1:0] D);
+     input logic [WIDTH-1:0] D
+     output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
         if (load)
@@ -191,11 +191,11 @@ endmodule : ShiftRegisterPIPO
 
 module ShiftRegisterSIPO
     #(parameter WIDTH = 8)
-    (output logic [WIDTH-1:0] Q,
-     input logic en,
+    (input logic en,
      input logic left,
      input logic serial,
-     input logic clock);
+     input logic clock
+     output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
         if (en) begin
@@ -210,12 +210,12 @@ endmodule : ShiftRegisterSIPO
 
 module BarrelShiftRegister
     #(parameter WIDTH = 8)
-    (output logic [WIDTH-1:0] Q,
-     input logic en,
+    (input logic en,
      input logic load,
      input logic [1:0] by,
      input logic clock,
-     input logic [WIDTH-1:0] D);
+     input logic [WIDTH-1:0] D
+     output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
         if (load)
@@ -228,36 +228,33 @@ endmodule : BarrelShiftRegister
 
 module BusDriver
     #(parameter WIDTH = 8)
-    (output logic [WIDTH-1:0] bus,
-     input logic en,
+    (input logic en,
      input logic [WIDTH-1:0] buff,
-     input logic [WIDTH-1:0] data);
+     input logic [WIDTH-1:0] data
+     output logic [WIDTH-1:0] bus);
 
     assign bus = en ? data : buff;
 
 endmodule : BusDriver
 
 module Memory
-    #(parameter DW = 8, parameter AW = 4)
-    (output logic [DW-1:0] rdata,
-     input logic [DW-1:0] wdata,
-     input logic clock,
+    #(parameter DW = 8, W = 256, parameter AW = 4)
+    (input logic clock,
      input logic re,
      input logic we,
-     input logic [AW-1:0] addr);
+     input logic [AW-1:0] addr,
+     inout tri [DW-1:0] data);
 
-    logic [DW-1:0] mem [0:(1<<AW)-1];
+    logic [DW-1:0] M[W];
+    logic [DW-1:0] rData;
 
-    always_ff @(posedge clock) begin
+    assign data = (re) ? rData: 'z;
+
+    always_ff @(posedge clock)
         if (we)
-            mem[addr] <= wdata;
-    end
+            M[addr] <= data;
 
-    always_comb begin
-        if (re)
-           rdata = mem[addr];
-       else
-           rdata = '0;
-    end
+    always_comb
+        rData = M[addr];
 
 endmodule : Memory
