@@ -1,15 +1,15 @@
 `default_nettype none
 
 module Decoder
-    (input logic [2:0] I,
+    #(parameter WIDTH = 8)
+    (input logic [$clog2(WIDTH)-1:0] I,
      input logic   en,
-     output logic [7:0] D);
+     output logic [WIDTH-1:0] D);
 
      always_comb begin
+         D = '0;
          if (en)
-             D = 8'b1 << I;
-         else
-             D = 8'b0;
+             D[I] = 1'b1;
      end
 
 endmodule : Decoder
@@ -26,8 +26,9 @@ module BarrelShifter
 endmodule : BarrelShifter
 
 module Multiplexer
-    (input logic [7:0] I,
-     input logic [2:0] S,
+    #(parameter WIDTH = 8)
+    (input logic [WIDTH-1:0] I,
+     input logic [$clog2(WIDTH)-1:0] S,
      output logic Y);
 
     always_comb begin
@@ -37,18 +38,20 @@ module Multiplexer
 endmodule : Multiplexer
 
 module Mux2to1
-    (input logic [7:0] I0,
-     input logic [7:0] I1,
-     input logic        S,
-     output logic [7:0] Y);
+    #(parameter WIDTH = 8)
+    (input logic [WIDTH-1:0] I0,
+     input logic [WIDTH-1:0] I1,
+     input logic S,
+     output logic [WIDTH-1:0] Y);
 
         assign Y = (S) ? I1 : I0;
 
 endmodule : Mux2to1
 
 module MagComp
-    (input logic [7:0] A,
-     input logic [7:0] B,
+    #(parameter WIDTH = 8)
+    (input logic [WIDTH-1:0] A,
+     input logic [WIDTH-1:0] B,
      output logic AltB,
      output logic AeqB,
      output logic AgtB);
@@ -63,8 +66,9 @@ module MagComp
 endmodule : MagComp
 
 module Comparator
-    (input logic [3:0] A,
-     input logic [3:0] B,
+    #(parameter WIDTH = 8)
+    (input logic [WIDTH-1:0] A,
+     input logic [WIDTH-1:0] B,
      output logic AeqB);
 
     assign AeqB = (A === B);
@@ -72,22 +76,24 @@ module Comparator
 endmodule : Comparator
 
 module Adder
+    #(parameter WIDTH = 8)
     (output logic cout,
      input logic cin,
-     output logic [7:0] sum,
-     input logic [7:0] A,
-     input logic [7:0] B);
+     output logic [WIDTH-1:0] sum,
+     input logic [WIDTH-1:0] A,
+     input logic [WIDTH-1:0] B);
 
     assign {cout, sum} = A + B;
 
 endmodule : Adder
 
 module Subtracter
+    #(parameter WIDTH = 8)
     (output logic bout,
      input logic bin,
-     output logic [7:0] diff,
-     input logic [7:0] A,
-     input logic [7:0] B);
+     output logic [WIDTH-1:0] diff,
+     input logic [WIDTH-1:0] A,
+     input logic [WIDTH-1:0] B);
 
     assign {bout, diff} = A - B;
 
@@ -97,7 +103,7 @@ module DFlipFlop
     (input logic D,
      input logic clock,
      input logic preset_L,
-     input logic reset_L
+     input logic reset_L,
      output logic Q);
 
     always_ff @(posedge clock or negedge preset_L or negedge reset_L) begin
@@ -116,7 +122,7 @@ module Register
     (input logic en,
      input logic clear,
      input logic clock,
-     input logic [WIDTH-1:0] D
+     input logic [WIDTH-1:0] D,
      output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
@@ -135,7 +141,7 @@ module Counter
      input logic load,
      input logic up,
      input logic clock,
-     input logic [WIDTH-1:0] D
+     input logic [WIDTH-1:0] D,
      output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
@@ -155,7 +161,7 @@ endmodule : Counter
 
 module Synchronizer
     (input logic async,
-     input logic clock
+     input logic clock,
      output logic sync);
 
     logic first;
@@ -173,7 +179,7 @@ module ShiftRegisterPIPO
      input logic left,
      input logic load,
      input logic clock,
-     input logic [WIDTH-1:0] D
+     input logic [WIDTH-1:0] D,
      output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
@@ -194,7 +200,7 @@ module ShiftRegisterSIPO
     (input logic en,
      input logic left,
      input logic serial,
-     input logic clock
+     input logic clock,
      output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
@@ -214,7 +220,7 @@ module BarrelShiftRegister
      input logic load,
      input logic [1:0] by,
      input logic clock,
-     input logic [WIDTH-1:0] D
+     input logic [WIDTH-1:0] D,
      output logic [WIDTH-1:0] Q);
 
     always_ff @(posedge clock) begin
@@ -230,7 +236,7 @@ module BusDriver
     #(parameter WIDTH = 8)
     (input logic en,
      input logic [WIDTH-1:0] buff,
-     input logic [WIDTH-1:0] data
+     input logic [WIDTH-1:0] data,
      output logic [WIDTH-1:0] bus);
 
     assign bus = en ? data : buff;
