@@ -21,7 +21,7 @@ TRY_READ:
 WAIT_READY:
     LW r7, r2, $0
     LI r5, $8000
-    AND r7, r7, r0
+    AND r7, r7, r5
     BRZ WAIT_READY
 
     LW r5, r3, $0
@@ -33,7 +33,7 @@ WAIT_READY:
 
 PARITY_LOOP:
     LI r0, $0000
-    AND r5, r5, r0
+    ADD r5, r5, r0
     BRZ PARITY_DONE
     LI r0, $0001
     AND r0, r5, r0
@@ -46,7 +46,7 @@ NO_TOG:
     SRL r5, r5, $1
     BRA PARITY_LOOP
 
-PARITY:DONE
+PARITY_DONE:
     LI r0, $0000
     ADD r7, r7, r0
     BRZ GOOD_DATA
@@ -59,7 +59,7 @@ BAD_DATA:
 
     LI r7, $0005
     SW r1, r7, $0
-    BRA TRY_READ
+    BRA WAIT_READY
 
 GOOD_DATA:
     LI r7, $0001
@@ -91,10 +91,4 @@ ADVANCE_PTR:
 WRAP_PTR:
     LI r4, $2000
     BRA MAIN_LOOP
-
-        .DW $0012
-        .DW $0014
-        .DW $0020
-        .DW $2000
-        .DW $2008
 
