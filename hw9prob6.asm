@@ -34,7 +34,7 @@ WAITREADY
     SW r1, r7, $0
 
     ;r7 parity accumulator
-    LW r7, r3, $0
+    LI r7, $0000
 
 PARITYLOOP
     LI r0, $0000
@@ -49,7 +49,7 @@ PARITYLOOP
 
 NOTOG
     LI r2, $0001
-    SRL r5, r5, r0
+    SRL r5, r5, r2
     BRA PARITYLOOP
 
 PARITYDONE
