@@ -1,6 +1,9 @@
+    .ORG $0000
+    BRA START
+
     .ORG $1000
 
-START:
+START
     LI r1, $0012
     LI r2, $0014
     LI r3, $0020
@@ -10,15 +13,14 @@ START:
     LI r7, $0001
     SW r1, r7, $0
 
-MAINLOOP:
+MAINLOOP
     LI r7, $0003
     SW r1, r7, $0
 
     ;3 attempts
     LI r6, $0003
 
-TRYREAD:
-WAITREADY:
+WAITREADY
     LW r7, r2, $0
     LI r5, $8000
     AND r7, r7, r5
@@ -29,9 +31,9 @@ WAITREADY:
     LI r7, $000D
     SW r1, r7, $0
 
-    LI r7, $0000
+    LW r7, r3, $0
 
-PARITYLOOP:
+PARITYLOOP
     LI r0, $0000
     ADD r5, r5, r0
     BRZ PARITYDONE
@@ -42,16 +44,17 @@ PARITYLOOP:
     LI r0, $0001
     XOR r7, r7, r0
 
-NOTOG:
-    SRL r5, r5, $1
+NOTOG
+    LI r0, $0001
+    SRL r5, r5, r0
     BRA PARITYLOOP
 
-PARITYDONE:
+PARITYDONE
     LI r0, $0000
     ADD r7, r7, r0
     BRZ GOODDATA
 
-BADDATA:
+BADDATA
     ;one attempt failed
     LI r0, $0001
     SUB r6, r6, r0
@@ -61,7 +64,7 @@ BADDATA:
     SW r1, r7, $0
     BRA WAITREADY
 
-GOODDATA:
+GOODDATA
     LI r7, $0001
     SW r1, r7, $0
 
@@ -72,14 +75,14 @@ GOODDATA:
 
     BRA ADVANCEPTR
 
-FAILED:
+FAILED
     LI r7, $0009
     SW r1, r7, $0
 
     LI r5, $00FF
     SW r4, r5, $0
 
-ADVANCEPTR:
+ADVANCEPTR
     LI r0, $0001
     ADD r4, r4, r0
 
@@ -88,7 +91,7 @@ ADVANCEPTR:
     BRZ WRAPPTR
     BRA MAINLOOP
 
-WRAPPTR:
+WRAPPTR
     LI r4, $2000
     BRA MAINLOOP
 
