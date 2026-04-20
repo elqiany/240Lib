@@ -1,3 +1,4 @@
+;hw9prob6 temp sensor
     .ORG $0000
     BRA START
 
@@ -26,42 +27,45 @@ WAITREADY
     AND r7, r7, r5
     BRZ WAITREADY
 
+    ;r5 working copy for parity
     LW r5, r3, $0
 
     LI r7, $000D
     SW r1, r7, $0
 
+    ;r7 parity accumulator
     LW r7, r3, $0
 
 PARITYLOOP
     LI r0, $0000
     ADD r5, r5, r0
     BRZ PARITYDONE
-    LI r0, $0001
-    AND r0, r5, r0
+    LI r2, $0001
+    AND r2, r5, r2
     BRZ NOTOG
 
-    LI r0, $0001
-    XOR r7, r7, r0
+    LI r2, $0001
+    XOR r7, r7, r2
 
 NOTOG
-    LI r0, $0001
+    LI r2, $0001
     SRL r5, r5, r0
     BRA PARITYLOOP
 
 PARITYDONE
-    LI r0, $0000
     ADD r7, r7, r0
     BRZ GOODDATA
 
 BADDATA
     ;one attempt failed
-    LI r0, $0001
-    SUB r6, r6, r0
+    LI r2, $0001
+    SUB r6, r6, r2
     BRZ FAILED
 
     LI r7, $0005
     SW r1, r7, $0
+
+    LI r2, $0014
     BRA WAITREADY
 
 GOODDATA
@@ -83,15 +87,18 @@ FAILED
     SW r4, r5, $0
 
 ADVANCEPTR
-    LI r0, $0001
-    ADD r4, r4, r0
+    LI r2, $0001
+    ADD r4, r4, r2
 
     LI  r7, $2008 ;wrap
     SUB r7, r4, r7
     BRZ WRAPPTR
+
+    LI r2, $0014
     BRA MAINLOOP
 
 WRAPPTR
     LI r4, $2000
+    LI r2, $0014
     BRA MAINLOOP
 
